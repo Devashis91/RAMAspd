@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RamasPD — Social Media & Business Automation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0b;
+      --deep: #111114;
+      --card: #16161a;
+      --border: rgba(255,255,255,0.07);
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --white: #f5f4f0;
+      --muted: rgba(245,244,240,0.45);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: rgba(10,10,11,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: var(--gold);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--black);
+      letter-spacing: -0.03em;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+
+    .logo-text span { color: var(--gold); }
+
+    nav ul {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    nav ul a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 4px;
+      font-weight: 500 !important;
+      transition: background 0.2s, transform 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 7vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      max-width: 900px;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.75;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 5px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(201,168,76,0.25);
+    }
+
+    .btn-ghost {
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.85rem 2.2rem;
+      border-radius: 5px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+
+    .hero-stats {
+      display: flex;
+      gap: 3.5rem;
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 500;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 7rem 4rem; }
+    .section-inner { max-width: 1160px; margin: 0 auto; }
+    .section-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.75;
+      max-width: 500px;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--deep); }
+
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .service-card {
+      background: var(--card);
+      padding: 3rem;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .service-card.visible {
+      animation: fadeUp 0.7s forwards;
+    }
+
+    .service-card:hover { border-color: rgba(201,168,76,0.3); }
+    .service-card:hover .service-icon { background: var(--gold); color: var(--black); }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .service-card:hover::after { transform: scaleX(1); }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.8rem;
+      font-size: 1.3rem;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .service-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .service-features li {
+      font-size: 0.84rem;
+      color: var(--muted);
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .service-features li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 0.7rem;
+      top: 0.05em;
+    }
+
+    /* ── PROCESS ── */
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      border: 1px solid var(--border);
+    }
+
+    .process-step {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid var(--border);
+      position: relative;
+      opacity: 0;
+      transform: translateY(15px);
+    }
+
+    .process-step.visible { animation: fadeUp 0.6s forwards; }
+    .process-step:last-child { border-right: none; }
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: rgba(201,168,76,0.15);
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+
+    .step-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 0.7rem;
+      letter-spacing: 0.02em;
+    }
+
+    .step-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── WHY US ── */
+    #why { background: var(--deep); }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .why-visual {
+      position: relative;
+    }
+
+    .why-card-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .why-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 1.8rem 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .why-item:hover {
+      border-color: rgba(201,168,76,0.25);
+      background: rgba(201,168,76,0.03);
+    }
+
+    .why-item-icon {
+      font-size: 1.2rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .why-item-title {
+      font-size: 0.92rem;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    .why-item-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial-band {
+      background: var(--gold);
+      padding: 4rem;
+      text-align: center;
+    }
+
+    .testimonial-band blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 400;
+      color: var(--black);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.4;
+    }
+
+    .testimonial-band cite {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(10,10,11,0.6);
+      font-style: normal;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 8rem 4rem;
+    }
+
+    .cta-section .section-title {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .cta-section p {
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      font-size: 1rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      nav ul { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .process-step { border-right: none; border-bottom: 1px solid var(--border); }
+      .why-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .why-visual { display: none; }
+      .hero-stats { gap: 2rem; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .services-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">
+      <div class="logo-mark">R</div>
+      <span class="logo-text">Ramas<span>PD</span></span>
+    </a>
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#contact" class="nav-cta">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-glow"></div>
+    <p class="hero-label">Social Media · Business Automation</p>
+    <h1>Grow Smarter.<br><em>Scale Faster.</em></h1>
+    <p>We manage your digital presence and automate your business workflows — so you can focus on what you do best.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Start a Project</a>
+      <a href="#services" class="btn-ghost">Explore Services</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">150+</span>
+        <span class="stat-label">Clients Served</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">3.2×</span>
+        <span class="stat-label">Avg. Engagement Lift</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">40h</span>
+        <span class="stat-label">Saved Weekly / Client</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">98%</span>
+        <span class="stat-label">Client Retention</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <div class="services-header">
+        <div>
+          <p class="section-tag">What We Do</p>
+          <h2 class="section-title">Two Core Services.<br>One Clear Mission.</h2>
+        </div>
+        <p class="section-subtitle">Every engagement is built around measurable growth — more reach, more time, more revenue.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card" data-animate>
+          <div class="service-icon">📱</div>
+          <h3>Social Media Management</h3>
+          <p>Full-service management of your brand's social presence. From strategy and content creation to scheduling, community building, and performance analytics.</p>
+          <ul class="service-features">
+            <li>Content calendar creation & scheduling</li>
+            <li>Platform-optimized copywriting & design</li>
+            <li>Audience growth & engagement strategy</li>
+            <li>Instagram, LinkedIn, Facebook & TikTok</li>
+            <li>Monthly performance reports & insights</li>
+            <li>Brand voice development</li>
+          </ul>
+        </div>
+
+        <div class="service-card" data-animate style="animation-delay:0.15s">
+          <div class="service-icon">⚙️</div>
+          <h3>Business Automation</h3>
+          <p>We map, streamline and automate your most time-consuming business processes — from lead management to client onboarding and internal workflows.</p>
+          <ul class="service-features">
+            <li>CRM setup, integration & automation</li>
+            <li>Lead capture & follow-up sequences</li>
+            <li>Email & SMS marketing automation</li>
+            <li>Onboarding & client journey workflows</li>
+            <li>Reporting dashboards & KPI tracking</li>
+            <li>Zapier, Make, and custom integrations</li>
+          </ul>
+        </div>
+
+        <div class="service-card" data-animate style="animation-delay:0.1s">
+          <div class="service-icon">🎯</div>
+          <h3>Paid Social Advertising</h3>
+          <p>Data-driven paid campaigns across Meta, TikTok and LinkedIn designed to acquire customers, not just impressions.</p>
+          <ul class="service-features">
+            <li>Ad strategy & creative direction</li>
+            <li>Campaign setup, launch & A/B testing</li>
+            <li>Retargeting & lookalike audiences</li>
+            <li>Budget optimization & scaling</li>
+          </ul>
+        </div>
+
+        <div class="service-card" data-animate style="animation-delay:0.25s">
+          <div class="service-icon">📊</div>
+          <h3>Analytics & Strategy</h3>
+          <p>Clear visibility into what's working and a roadmap for sustained growth. No vanity metrics — only insights that move the needle.</p>
+          <ul class="service-features">
+            <li>Cross-channel performance audits</li>
+            <li>Competitor & market analysis</li>
+            <li>Quarterly growth roadmaps</li>
+            <li>Custom dashboard setup</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="section-inner">
+      <p class="section-tag">How It Works</p>
+      <h2 class="section-title">From Onboarding to Growth<br>in Four Steps.</h2>
+
+      <div class="process-steps">
+        <div class="process-step" data-animate>
+          <div class="step-num">01</div>
+          <div class="step-title">Discovery Call</div>
+          <p class="step-desc">We learn your business, goals, audience and current challenges in a focused 30-minute strategy session.</p>
+        </div>
+        <div class="process-step" data-animate style="animation-delay:0.1s">
+          <div class="step-num">02</div>
+          <div class="step-title">Custom Strategy</div>
+          <p class="step-desc">We build a tailored action plan — covering content, automation flows, and KPIs specific to your business.</p>
+        </div>
+        <div class="process-step" data-animate style="animation-delay:0.2s">
+          <div class="step-num">03</div>
+          <div class="step-title">Execution</div>
+          <p class="step-desc">We go live. Content goes out, automations run, ads launch — everything tracked from day one.</p>
+        </div>
+        <div class="process-step" data-animate style="animation-delay:0.3s">
+          <div class="step-num">04</div>
+          <div class="step-title">Optimize & Scale</div>
+          <p class="step-desc">Monthly reviews, transparent reporting, and continuous refinement to compound your results over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL BAND -->
+  <div class="testimonial-band">
+    <blockquote>"Working with RamasPD saved us 35+ hours a month and tripled our Instagram engagement in 90 days."</blockquote>
+    <cite>— Founder, E-Commerce Brand</cite>
+  </div>
+
+  <!-- WHY US -->
+  <section id="why">
+    <div class="section-inner">
+      <div class="why-grid">
+        <div>
+          <p class="section-tag">Why RamasPD</p>
+          <h2 class="section-title">Results You Can<br><em>Measure.</em></h2>
+          <p class="section-subtitle" style="margin-bottom:3rem;">We're not an agency that disappears after onboarding. We're a partner built for long-term growth.</p>
+
+          <div class="why-card-stack" data-animate>
+            <div class="why-item">
+              <div class="why-item-icon">✦</div>
+              <div>
+                <div class="why-item-title">No Contracts, No Lock-in</div>
+                <p class="why-item-desc">Month-to-month engagements. We earn your business every single month.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="why-item-icon">✦</div>
+              <div>
+                <div class="why-item-title">Dedicated Account Manager</div>
+                <p class="why-item-desc">One point of contact who knows your brand inside and out. No ticket queues.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="why-item-icon">✦</div>
+              <div>
+                <div class="why-item-title">Transparent Reporting</div>
+                <p class="why-item-desc">Live dashboards and monthly reports. You always know exactly where your investment is going.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="why-item-icon">✦</div>
+              <div>
+                <div class="why-item-title">Fast Turnaround</div>
+                <p class="why-item-desc">Go live in under 7 days. We move at the speed of business, not agencies.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="why-visual">
+          <div style="background:var(--card);border:1px solid var(--border);padding:2.5rem;border-radius:2px;">
+            <p class="section-tag" style="margin-bottom:1.5rem;">Client Results Snapshot</p>
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                  <span style="font-size:0.82rem;color:var(--muted)">Instagram Engagement</span>
+                  <span style="font-size:0.82rem;color:var(--gold)">+218%</span>
+                </div>
+                <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:75%;background:var(--gold);border-radius:2px;transition:width 1s;"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                  <span style="font-size:0.82rem;color:var(--muted)">Time Saved on Admin</span>
+                  <span style="font-size:0.82rem;color:var(--gold)">35+ hrs/wk</span>
+                </div>
+                <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:88%;background:var(--gold);border-radius:2px;"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                  <span style="font-size:0.82rem;color:var(--muted)">Lead Response Time</span>
+                  <span style="font-size:0.82rem;color:var(--gold)">−92%</span>
+                </div>
+                <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:60%;background:var(--gold);border-radius:2px;"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                  <span style="font-size:0.82rem;color:var(--muted)">Client Retention Rate</span>
+                  <span style="font-size:0.82rem;color:var(--gold)">98%</span>
+                </div>
+                <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:95%;background:var(--gold);border-radius:2px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="section-inner">
+      <p class="section-tag">Ready to Start?</p>
+      <h2 class="section-title">Let's Build Something That Works.</h2>
+      <p>Book a free 30-minute strategy call. No pitch, no pressure — just clarity.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="mailto:hello@ramasspd.com" class="btn-primary">Book a Free Call</a>
+        <a href="mailto:hello@ramasspd.com" class="btn-ghost">Send a Message</a>
+      </div>
+      <p style="margin-top:2.5rem;font-size:0.78rem;color:var(--muted);letter-spacing:0.06em;">hello@ramasspd.com &nbsp;·&nbsp; Response within 24 hours</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">
+      <a href="#" class="logo" style="margin-bottom:0.3rem;">
+        <div class="logo-mark">R</div>
+        <span class="logo-text">Ramas<span>PD</span></span>
+      </a>
+      <span class="footer-copy">© 2025 RamasPD. All rights reserved.</span>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('[data-animate]').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Also observe children of data-animate parents
+    document.querySelectorAll('.service-card, .process-step').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Smooth nav scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Nav shrink on scroll
+    window.addEventListener('scroll', () => {
+      document.querySelector('nav').style.padding = 
+        window.scrollY > 60 ? '0.9rem 4rem' : '1.4rem 4rem';
+    });
+  </script>
+
+</body>
+</html>
